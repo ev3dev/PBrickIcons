@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="Progammable Brick Icons" Language="1033" Version="1.0" Manufacturer="ev3dev.org" UpgradeCode="ca8cdd3a-8a58-4ece-bbdb-4fa1332b4f01">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate />
+
+        <CustomActionRef Id="SetDeviceMetadataStorePath"/>
+        <Feature Id="ProductFeature" Title="Progammable Brick Icons" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+
+        <WixVariable Id="WixUILicenseRtf" Value="../LICENSE.rtf" />
+        <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Note: You must remove any existing NXT/EV3/WeDo devices and reinstall them in order for these icons to appear." />
+        <UIRef Id="WixUI_Minimal" />
+    </Product>
+
+    <Fragment>
+        <Binary Id="DeviceMetadataStore.CA.dll" src="..\DeviceMetadataStoreCustomAction\bin\$(var.Configuration)\DeviceMetadataStore.CA.dll" />
+        <CustomAction Id="SetDeviceMetadataStorePath" BinaryKey="DeviceMetadataStore.CA.dll" DllEntry="SetDeviceMetadataStorePath" Execute="immediate" />
+        <InstallUISequence>
+            <Custom Action="SetDeviceMetadataStorePath" Before="CostInitialize" />
+        </InstallUISequence>
+    </Fragment>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="DeviceMetadataStorePath">
+                <Directory Id="INSTALLFOLDER" Name="." />
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+            <Component Id="Ev3DeviceMetadataComponent" Guid="096fc58b-42dc-4ff7-bc4f-e2e352ce3a99">
+                <File Id="Ev3DeviceMetadataFile" Source="..\DeviceMetadata\acd3831b-026a-4bbe-ae39-99af57d482d5.devicemetadata-ms" />
+            </Component>
+            <Component Id="Ev3FirmwareUpdateDeviceMetadataComponent" Guid="8c7cdf05-a516-479b-92f2-a8a1f948f08c">
+                <File Id="Ev3FirmwareUpdateDeviceMetadataFile" Source="..\DeviceMetadata\acd3831b-026a-4bbe-ae39-35b698204df3.devicemetadata-ms" />
+            </Component>
+            <Component Id="NxtDeviceMetaDataComponent" Guid="9c2ca980-eada-4459-a877-9de2bb22630d">
+                <File Id="NxtDeviceMetaDataFile" Source="..\DeviceMetadata\acd3831b-026a-4bbe-ae39-3d572377bfbb.devicemetadata-ms" />
+            </Component>
+            <Component Id="NxtFirmwareUpdateDeviceMetaDataComponent" Guid="6a38396f-7c92-4e55-b355-4e7e9b2ebd24">
+                <File Id="NxtFirmwareUpdateDeviceMetaDataFile" Source="..\DeviceMetadata\acd3831b-026a-4bbe-ae39-46f8342d749b.devicemetadata-ms" />
+            </Component>
+            <Component Id="WedoUsbHubDeviceMetadataComponent" Guid="6e56d2c7-6502-4432-88a3-456da84e59ad">
+                <File Id="WedoUsbHubDeviceMetadataFile" Source="..\DeviceMetadata\acd3831b-026a-4bbe-ae39-0b7cb27b739a.devicemetadata-ms" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
